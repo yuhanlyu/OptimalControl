@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- WARNING: Eclipse auto-generated file.
+              Any modifications will be overwritten.
+              To include a user specific buildfile here, simply create one in the same
+              directory with the processing instruction <?eclipse.ant.import?>
+              as the first entry and export the buildfile again. --><project basedir="." default="build" name="Optimal Control">
+    <property environment="env"/>
+    <property name="ECLIPSE_HOME" value="../../../Desktop/eclipse"/>
+    <property name="junit.output.dir" value="junit"/>
+    <property name="debuglevel" value="source,lines,vars"/>
+    <property name="target" value="1.8"/>
+    <property name="source" value="1.8"/>
+    <path id="JUnit 4.libraryclasspath">
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.junit_4.11.0.v201303080030/junit.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.hamcrest.core_1.3.0.v201303031735.jar"/>
+    </path>
+    <path id="Optimal Control.classpath">
+        <pathelement location="bin"/>
+        <path refid="JUnit 4.libraryclasspath"/>
+    </path>
+    <target name="init">
+        <mkdir dir="bin"/>
+        <copy includeemptydirs="false" todir="bin">
+            <fileset dir="src">
+                <exclude name="**/*.launch"/>
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="clean">
+        <delete dir="bin"/>
+    </target>
+    <target depends="clean" name="cleanall"/>
+    <target depends="build-subprojects,build-project" name="build"/>
+    <target name="build-subprojects"/>
+    <target depends="init" name="build-project">
+        <echo message="${ant.project.name}: ${ant.file}"/>
+        <javac debug="true" debuglevel="${debuglevel}" destdir="bin" includeantruntime="false" source="${source}" target="${target}">
+            <src path="src"/>
+            <classpath refid="Optimal Control.classpath"/>
+        </javac>
+    </target>
+    <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
+    <target description="copy Eclipse compiler jars to ant lib directory" name="init-eclipse-compiler">
+        <copy todir="${ant.library.dir}">
+            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
+        </copy>
+        <unzip dest="${ant.library.dir}">
+            <patternset includes="jdtCompilerAdapter.jar"/>
+            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
+        </unzip>
+    </target>
+    <target description="compile project with Eclipse compiler" name="build-eclipse-compiler">
+        <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
+        <antcall target="build"/>
+    </target>
+    <target name="ControlLineTest">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="optimalControl.ControlLineTest" todir="${junit.output.dir}"/>
+            <classpath refid="Optimal Control.classpath"/>
+        </junit>
+    </target>
+    <target name="ControlLineTest.test1">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="optimalControl.ControlLineTest" todir="${junit.output.dir}"/>
+            <classpath refid="Optimal Control.classpath"/>
+        </junit>
+    </target>
+    <target name="ControlLineTest1 (1)">
+        <java classname="optimalControl.ControlLineTest1" failonerror="true" fork="yes">
+            <classpath refid="Optimal Control.classpath"/>
+        </java>
+    </target>
+    <target name="ControlLineTest1">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="optimalControl.ControlLineTest1" todir="${junit.output.dir}"/>
+            <classpath refid="Optimal Control.classpath"/>
+        </junit>
+    </target>
+    <target name="ControlSetTest">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="optimalControl.ControlSetTest" todir="${junit.output.dir}"/>
+            <classpath refid="Optimal Control.classpath"/>
+        </junit>
+    </target>
+    <target name="DistanceMinimizerTest">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="rigidBody2DFreeSwitch.DistanceMinimizerTest" todir="${junit.output.dir}"/>
+            <classpath refid="Optimal Control.classpath"/>
+        </junit>
+    </target>
+    <target name="DTFunctorTest">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="optimalControl.DTFunctorTest" todir="${junit.output.dir}"/>
+            <classpath refid="Optimal Control.classpath"/>
+        </junit>
+    </target>
+    <target name="SynthesisAnimate">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="ui.SynthesisAnimate" todir="${junit.output.dir}"/>
+            <classpath refid="Optimal Control.classpath"/>
+        </junit>
+    </target>
+    <target name="SynthesisTest (1)">
+        <java classname="rigidBody2DFreeSwitch.SynthesisTest" failonerror="true" fork="yes">
+            <classpath refid="Optimal Control.classpath"/>
+        </java>
+    </target>
+    <target name="SynthesisTest">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="rigidBody2DFreeSwitch.SynthesisTest" todir="${junit.output.dir}"/>
+            <classpath refid="Optimal Control.classpath"/>
+        </junit>
+    </target>
+    <target name="TrajectoryViewer (1)">
+        <java classname="ui.TrajectoryViewer" failonerror="true" fork="yes">
+            <classpath refid="Optimal Control.classpath"/>
+        </java>
+    </target>
+    <target name="Viewer (1)">
+        <java classname="ui.Viewer" failonerror="true" fork="yes">
+            <jvmarg line="-Xmx8g"/>
+            <classpath refid="Optimal Control.classpath"/>
+        </java>
+    </target>
+    <target name="PrecomputedTable">
+        <java classname="data.PrecomputedTable" failonerror="true" fork="yes">
+            <classpath refid="Optimal Control.classpath"/>
+        </java>
+    </target>
+    <target name="junitreport">
+        <junitreport todir="${junit.output.dir}">
+            <fileset dir="${junit.output.dir}">
+                <include name="TEST-*.xml"/>
+            </fileset>
+            <report format="frames" todir="${junit.output.dir}"/>
+        </junitreport>
+    </target>
+</project>
