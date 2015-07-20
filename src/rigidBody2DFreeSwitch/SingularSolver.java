@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
+import java.util.logging.Logger;
 import java.util.stream.IntStream;
 
 import optimalControl.Control;
@@ -19,6 +20,7 @@ import optimalControl.Utility;
  *
  */
 public class SingularSolver extends OptimalTrajectorySolver {
+	private static final Logger logger = Logger.getLogger(FreePlanner.class.getName());
 	protected static final double MIN_SINGULAR_DURATION = 0.00001; // for Omni-directional vehicle
 	protected double upperBound;
 
@@ -35,6 +37,7 @@ public class SingularSolver extends OptimalTrajectorySolver {
 
 	@Override
 	public TrajectoryInfo solve() {
+		logger.info("Start to find a singular solution for configuration " + Ts);
 		solution = singular();
 		minTime = solution.getTime();
 		return solution;
@@ -58,6 +61,7 @@ public class SingularSolver extends OptimalTrajectorySolver {
 	 * @return a trajectory
 	 */
 	private TrajectoryInfo singular(Control us) {
+		logger.fine("Find a singular solution with the first control " + us);
 		return U.controlStream().filter(uf -> us.isRotation() || uf.isRotation())
 				                .reduce(TrajectoryInfo.INFINITY, 
                                         (currentMin, uf) -> 
@@ -73,6 +77,7 @@ public class SingularSolver extends OptimalTrajectorySolver {
 	 * @return a trajectory
 	 */
 	private TrajectoryInfo singular(Control us, Control uf) {
+		logger.finer("Find a singular solution with the first control " + us + ", and the last control " + uf);
 		ControlLineFactory factory = new ControlLineFactory(U, Ts, us, Tf, uf, true);
 		TrajectoryInfo positive = singular(us, uf, factory);
 		factory = new ControlLineFactory(U, Ts, us, Tf, uf, false);
@@ -108,6 +113,7 @@ public class SingularSolver extends OptimalTrajectorySolver {
 	 * @return a trajectory
 	 */
 	protected TrajectoryInfo singular(Control us, Control uf, ControlLine controlLine) {
+		logger.finest("Find a singular solution with the first control " + us + ", and the last control " + uf + ", where the control line is " + controlLine);
 		if (!controlLine.isValid())
 			return TrajectoryInfo.INFINITY;
 	    Transformation TLW = new Transformation(controlLine);
@@ -138,11 +144,15 @@ public class SingularSolver extends OptimalTrajectorySolver {
 	    	trajectory.append(gb);
 	    	foundOneSolution(TrajectoryInfo.createSingular(trajectory, controlLine));
 	    	if (!isGoal(Ts.move(trajectory))) {
-		    	System.out.println("Singular Error: " + us + " " + uf + " " + controlLine);
-		    	double error = Tf.toPoint().distance(Ts.move(trajectory).toPoint());
-		    	System.out.println("Error is " + error);
-		    	if (error > Utility.EPSILON * 10)
+	    		double error = Tf.toPoint().distance(Ts.move(trajectory).toPoint());
+	    		logger.warning("Numerical error in finding a singular solution, error is " + error);
+		    	if (error > Utility.EPSILON * 10) {
+		    		logger.severe("Cannot find a singular solution");
+		    		logger.warning("Numerical error in finding a singular solution, first control is " + us);
+		    		logger.warning("Numerical error in finding a singular solution, second control is " + uf);
+		    		logger.warning("Numerical error in finding a singular solution, control line is " + controlLine);
 		    		throw new RuntimeException("Singular Error");
+		    	}
 		    }
 	    }
 	    Trajectory trajectory = new Trajectory();
@@ -150,11 +160,15 @@ public class SingularSolver extends OptimalTrajectorySolver {
 	    trajectory.append(mid);
 	    trajectory.append(gb);
 	    if (!isGoal(Ts.move(trajectory))) {
-	    	System.out.println("Singular Error: " + us + " " + uf + " " + controlLine);
 	    	double error = Tf.toPoint().distance(Ts.move(trajectory).toPoint());
-	    	System.out.println("Error is " + error);
-	    	if (error > Utility.EPSILON * 10)
+	    	logger.warning("Numerical error in finding a singular solution, error is " + error);
+	    	if (error > Utility.EPSILON * 10) {
+	    		logger.severe("Cannot find a singular solution");
+	    		logger.warning("Numerical error in finding a singular solution, first control is " + us);
+	    		logger.warning("Numerical error in finding a singular solution, second control is " + uf);
+	    		logger.warning("Numerical error in finding a singular solution, control line is " + controlLine);
 	    		throw new RuntimeException("Singular Error");
+	    	}
 	    }
 	    return TrajectoryInfo.createSingular(trajectory, controlLine);
 	}

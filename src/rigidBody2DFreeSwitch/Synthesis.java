@@ -1,6 +1,8 @@
 package rigidBody2DFreeSwitch;
 import java.awt.geom.Point2D;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.IntStream;
 
 import optimalControl.Configuration;
@@ -14,6 +16,7 @@ import robotModel.Robot;
  *
  */
 public class Synthesis {
+	private static final Logger logger = Logger.getLogger(FreePlanner.class.getName());
 	public static final int NO_SOLUTION = -1;
 	public static final int FEASIBLE_SOLUTION = -2;
 	public static final int TGT_SOLUTION = -3;
@@ -65,6 +68,7 @@ public class Synthesis {
 	 * Create the whole synthesis
 	 */
 	private void synthesis() {
+		logger.info("Start to compute synthesis");
 		xLength = (int)((xUpperBound - xLowerBound) / resolution) + 1;
 		yLength = (int)((yUpperBound - yLowerBound) / resolution) + 1;
 		grid = new int[yLength][xLength];
@@ -76,7 +80,7 @@ public class Synthesis {
 		long endTime = System.nanoTime();
 		double duration = (endTime - startTime) / 1000000000.0;
 		double rates = (xLength * yLength) / duration;
-		System.out.println("Configurations per second is " + rates);
+		logger.info("Configurations per second is " + rates);
 	}
 	
 	/**
@@ -95,7 +99,7 @@ public class Synthesis {
 	private void synthesis(int xIndex, int yIndex) {
 		double x = xLowerBound + xIndex * resolution;
 		double y = yLowerBound + yIndex * resolution;
-		System.out.println(x + " " + y + " " + theta);
+		logger.info("Configuraiton: " + x + " " + y + " " + theta);
 		ControlSet U = robot.getControlSet();
 		Configuration qs = new Configuration(x, y, theta);
 		Transformation Ts = new Transformation(qs);

@@ -1,5 +1,7 @@
 package rigidBody2DFreeSwitch;
 
+import java.util.logging.Logger;
+
 import optimalControl.Control;
 import optimalControl.ControlLine;
 import optimalControl.ControlSet;
@@ -17,12 +19,15 @@ import optimalControl.Utility;
  */
 public class TGTSolver extends OptimalTrajectorySolver {
 	
+	private static final Logger logger = Logger.getLogger(FreePlanner.class.getName());
+	
 	public TGTSolver(ControlSet U, Transformation Ts) {
 		super(U, Ts);
 	}
 
 	@Override
 	public TrajectoryInfo solve() {
+		logger.info("Start to find a feasible solution for configuration " + Ts);
 		solution = TGT();
 		minTime = solution.getTime();
 		return solution;
@@ -55,6 +60,7 @@ public class TGTSolver extends OptimalTrajectorySolver {
 	 * @return a trajectory
 	 */
 	private TrajectoryInfo TGT(Control us, Control uf) {
+		logger.fine("Find a TGT solution with the first control " + us + " and the last control " + uf);
 	    ControlLine controlLine = TGTControlLine(us, uf);
 	    if (!controlLine.isValid())
 	        return TrajectoryInfo.INFINITY;
@@ -69,6 +75,7 @@ public class TGTSolver extends OptimalTrajectorySolver {
 	 * @return a trajectory
 	 */
 	protected TrajectoryInfo TGT(Control us, Control uf, ControlLine controlLine) {
+		logger.finer("Find a TGT solution with the first control " + us + " and the last control " + uf + ", where control line is " + controlLine);
 		Transformation TLW = new Transformation(controlLine);
 		Transformation TsL = TLW.transform(Ts);
 		Transformation afterUs = TsL;
@@ -114,6 +121,7 @@ public class TGTSolver extends OptimalTrajectorySolver {
 	    }
 	    trajectory.addControl(uf, tf);
 	    if (!isGoal(Ts.move(trajectory))) {
+	    	logger.severe("Cannot find a TGT solution");
 	    	throw new RuntimeException("TGT Error");
 	    }
 	    TrajectoryInfo result = TrajectoryInfo.createTGT(trajectory, controlLine);

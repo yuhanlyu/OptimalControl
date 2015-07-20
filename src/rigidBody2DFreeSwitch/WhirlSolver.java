@@ -3,6 +3,7 @@ import java.awt.geom.Point2D;
 import java.util.stream.IntStream;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import optimalControl.Control;
@@ -18,12 +19,15 @@ import optimalControl.Utility;
  */
 public class WhirlSolver extends OptimalTrajectorySolver {
 	
+	private static final Logger logger = Logger.getLogger(FreePlanner.class.getName());
+	
 	public WhirlSolver(ControlSet U, Transformation Ts) {
 		super(U, Ts);
 	}
 
 	@Override
 	public TrajectoryInfo solve() {
+		logger.info("Start to find a whirl solution for configuration " + Ts);
 		minTime = Double.POSITIVE_INFINITY;
 		solution = whirl();
 		minTime = solution.getTime();
@@ -48,6 +52,7 @@ public class WhirlSolver extends OptimalTrajectorySolver {
 	 * @return trajectory
 	 */
 	protected TrajectoryInfo whirl(double omega) {
+		logger.fine("Finding a whirl trajectory with an angular velocity " + omega);
 		List<Control> controls = U.controlStream().filter(u -> Utility.absEqual(u.getOmega(), omega))
 				                                  .collect(Collectors.toList());
 		return whirl(convexHull(controls));
@@ -93,6 +98,7 @@ public class WhirlSolver extends OptimalTrajectorySolver {
 	 * @return a trajectory
 	 */
 	protected TrajectoryInfo whirl(Control us, Control uf, double p, List<Control> controls) {
+		logger.finer("Finding a whirl trajectory with first control " + us + " and last control " + uf);
 		return controls.stream().filter(beforeUf -> !uf.equals(beforeUf))
 				                .reduce(TrajectoryInfo.INFINITY, 
                                         (currentMin, beforeUf) -> 
@@ -111,6 +117,7 @@ public class WhirlSolver extends OptimalTrajectorySolver {
 	 * @return a trajectory
 	 */
 	private TrajectoryInfo whirl(Control us, Control beforeUf, Control uf, double p, List<Control> controls) {
+		logger.finest("Finding a whirl trajectory with first control " + us + ", second to the last control " + beforeUf + " and last control " + uf);
 		//Rotate us to the beginning		
 		int middle = controls.indexOf(us);
 		Collections.rotate(controls, -middle);
@@ -219,6 +226,7 @@ public class WhirlSolver extends OptimalTrajectorySolver {
 	    T = T.move(uf, tf);
 	    trajectory.addControl(uf, tf);
 	    if (!isGoal(Ts.move(trajectory))) {
+	    	logger.severe("Cannot find a whirl solution");
 	    	throw new RuntimeException("Whirl Error");
 	    }
 	    return TrajectoryInfo.createWhirl(trajectory);
@@ -241,6 +249,7 @@ public class WhirlSolver extends OptimalTrajectorySolver {
 	    trajectory.addControl(us, ts);
 	    trajectory.addControl(uf, tf);
 	    if (!isGoal(Ts.move(trajectory))) {
+	    	logger.severe("Cannot find a whirl solution");
 	    	throw new RuntimeException("Whirl Error");
 	    }
 	    return TrajectoryInfo.createWhirl(trajectory);

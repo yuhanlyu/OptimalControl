@@ -3,6 +3,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
+import java.util.logging.Logger;
 
 import optimalControl.ControlLine;
 import optimalControl.DistanceTime;
@@ -25,6 +26,7 @@ import optimalControl.Utility;
  *
  */
 public class LipschitzianMinimizer extends DistanceMinimizer {
+	private static final Logger logger = Logger.getLogger(FreePlanner.class.getName());
 	private static final double DEFAULT_DELTA = 50 * Utility.EPSILON;  // Need some distance away from critical values
 	private static final double DEFAULT_TIME_ERROR = Utility.EPSILON;  // Some configurations may take very long time if
 	                                                         		   // this value is too small
@@ -212,6 +214,7 @@ public class LipschitzianMinimizer extends DistanceMinimizer {
 	 */
 	@Override
 	public GenericInfo minimize(DistanceMinimization minimization, boolean findAllTrajectories, List<TrajectoryInfo> trajectories) {
+		logger.info("Start to find a minimum, dist error is " + distError + ", time error is " + timeError + ", and delta is " + delta);
 		Interval range = minimization.getRange();
 		Interval safeRange = new Interval(range.getBegin() + delta, range.getEnd() - delta);
 		if (safeRange.isEmpty())
@@ -225,7 +228,7 @@ public class LipschitzianMinimizer extends DistanceMinimizer {
 			Region region = queue.remove();
 			double splitPoint = region.splitPoint();
 			DistanceTime dt = minimization.computeDistanceTime(splitPoint);
-			//System.out.println("Split at: " + splitPoint + " " + dt.getDistance());
+			logger.fine(region + " is split at: " + splitPoint + " " + dt.getDistance());
 			long cycles = minimization.getCycles();
 			boolean reachGoal = dt.getDistance() < distError;
 			

@@ -1,5 +1,6 @@
 package rigidBody2DFreeSwitch;
 import java.awt.geom.Point2D;
+import java.util.logging.Logger;
 
 import optimalControl.Control;
 import optimalControl.ControlSet;
@@ -14,6 +15,8 @@ import optimalControl.Utility;
  *
  */
 public class FeasibleSolver extends OptimalTrajectorySolver {
+	
+	private static final Logger logger = Logger.getLogger(FreePlanner.class.getName());
 
 	/**
 	 * Constructor
@@ -26,6 +29,7 @@ public class FeasibleSolver extends OptimalTrajectorySolver {
 
 	@Override
 	public TrajectoryInfo solve() {
+		logger.info("Start to find a feasible solution for configuration " + Ts);
 		if (isGoal(Ts)) {
 			Trajectory trajectory = new Trajectory();
 			trajectory.addControl(U.getControl(0), 0);
@@ -45,6 +49,7 @@ public class FeasibleSolver extends OptimalTrajectorySolver {
 	 * @return a trajectory
 	 */
 	private TrajectoryInfo singlePlan() {
+		logger.fine("In single plan");
 		return U.controlStream().reduce(TrajectoryInfo.INFINITY, 
                                         (currentMin, u) -> 
                                         {  TrajectoryInfo sol = singlePlan(u); 
@@ -58,6 +63,7 @@ public class FeasibleSolver extends OptimalTrajectorySolver {
 	 * @return a trajectory
 	 */
 	private TrajectoryInfo singlePlan(Control u) {
+		logger.finer("In single plan " + u);
 		return u.isTranslation() ? singleTranslation(u) : singleRotation(u);
 	}
 	
@@ -67,6 +73,7 @@ public class FeasibleSolver extends OptimalTrajectorySolver {
 	 * @return a trajectory
 	 */
 	private TrajectoryInfo singleTranslation(Control u) {
+		logger.finest("In single plan with one translation " + u);
 	    Control usW = u.toWorld(Ts);
 	    Control ufW = u.toWorld(Tf);
 
@@ -80,6 +87,7 @@ public class FeasibleSolver extends OptimalTrajectorySolver {
 	    Trajectory trajectory = new Trajectory();
 	    trajectory.addControl(u, time);
 	    if (!isGoal(Ts.move(trajectory))) {
+	    	logger.severe("Cannot find a feasible solution one translation");
 	    	throw new RuntimeException("Feasible: single translation Error");
 	    }
 	    return new TrajectoryInfo(trajectory);
@@ -91,6 +99,7 @@ public class FeasibleSolver extends OptimalTrajectorySolver {
 	 * @return a trajectory
 	 */
 	private TrajectoryInfo singleRotation(Control u) {
+		logger.finest("In single plan with one rotation " + u);
 	    Homogeneous cs = Ts.transform(new Homogeneous(u));
 	    Homogeneous cf = Tf.transform(new Homogeneous(u));
 	    // If the rotation center are not the same, then
@@ -103,6 +112,7 @@ public class FeasibleSolver extends OptimalTrajectorySolver {
 	    Trajectory trajectory = new Trajectory();
 	    trajectory.addControl(u, time);
 	    if (!isGoal(Ts.move(trajectory))) {
+	    	logger.severe("Cannot find a feasible solution one rotation");
 	    	throw new RuntimeException("Feasible: single rotation Error");
 	    }
 	    return new TrajectoryInfo(trajectory);
@@ -113,6 +123,7 @@ public class FeasibleSolver extends OptimalTrajectorySolver {
 	 * @return a trajectory
 	 */
 	private TrajectoryInfo pairPlan() {
+		logger.fine("In pair plan");
 		return U.controlStream().reduce(TrajectoryInfo.INFINITY, 
                                         (currentMin, u1) -> 
                                         {  TrajectoryInfo sol = pairPlan(u1); 
@@ -141,6 +152,7 @@ public class FeasibleSolver extends OptimalTrajectorySolver {
 	 * @return a trajectory
 	 */
 	private TrajectoryInfo pairPlan(Control u1, Control u2) {
+		logger.finer("In pair plan " + u1 + " " + u2);
 		if (u1.isTranslation() && u2.isTranslation())
 			return twoTranslations(u1, u2);
 	    else if (u1.isRotation() && u2.isRotation())
@@ -158,6 +170,7 @@ public class FeasibleSolver extends OptimalTrajectorySolver {
 	 * @return a trajectory
 	 */
 	private TrajectoryInfo twoTranslations(Control us, Control uf) {
+		logger.finest("In pair plan with two controls" + us + " " + uf);
 		if (!Utility.angleEqual(Ts.getTheta(), Tf.getTheta()))
 			return TrajectoryInfo.INFINITY;
 
@@ -193,6 +206,7 @@ public class FeasibleSolver extends OptimalTrajectorySolver {
 	    trajectory.addControl(us, ts);
 	    trajectory.addControl(uf, tf);
 	    if (!isGoal(Ts.move(trajectory))) {
+	    	logger.severe("Cannot find a feasible solution with two translations");
 	    	throw new RuntimeException("Feasible: two translations Error");
 	    }
 	    return new TrajectoryInfo(trajectory);
@@ -205,6 +219,7 @@ public class FeasibleSolver extends OptimalTrajectorySolver {
 	 * @return a trajectory
 	 */
 	private TrajectoryInfo rotationAndTranslation(Control u1, Control u2) {
+		logger.finest("In pair plan with one rotation and one translation " + u1 + " " + u2);
 	    Control u2s = u2.toWorld(Ts);
 	    Control u2f = u2.toWorld(Tf);
 	    
@@ -223,6 +238,7 @@ public class FeasibleSolver extends OptimalTrajectorySolver {
 	    trajectory.addControl(u2, tc);
 	    trajectory.addControl(u1, tb);
 	    if (!isGoal(Ts.move(trajectory))) {
+	    	logger.severe("Cannot find a feasible solution with one rotation and one translation");
 	    	throw new RuntimeException("Feasible: rotation and translation Error");
 	    }
 	    return new TrajectoryInfo(trajectory);
@@ -235,6 +251,7 @@ public class FeasibleSolver extends OptimalTrajectorySolver {
 	 * @return a trajectory
 	 */
 	private TrajectoryInfo twoRotations(Control u1, Control u2) {
+		logger.finest("In pair plan with two rotations " + u1 + " " + u2);
 	    Control u2v = new Control(u2.getVx(), u2.getVy(), 0.0);
 	    Control u2s = u2v.toWorld(Ts);
 	    Control u2f = u2v.toWorld(Tf);
@@ -272,7 +289,10 @@ public class FeasibleSolver extends OptimalTrajectorySolver {
 	    	System.out.println(trajectory);
 	    	System.out.println(Ts.move(trajectory));
 	    	double error = Tf.toPoint().distance(Ts.move(trajectory).toPoint());
-	    	System.out.println(error);
+	    	logger.warning("Numerical error in two rotations, error is " + error);
+	    	logger.warning("Numerical error in two rotations, initial configuration is " + Ts);
+	    	logger.warning("Numerical error in two rotations, trajectory is " + trajectory);
+	    	logger.warning("Numerical error in two rotations, final configuration is " + Ts.move(trajectory));
 	    	// For some cases, the computation is not exact..
 	    	//if (error > Utility.EPSILON * 100)
 	    	//	throw new RuntimeException("Feasible: two rotations Error");

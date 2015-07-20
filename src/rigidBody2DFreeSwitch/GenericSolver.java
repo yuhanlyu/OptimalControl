@@ -1,6 +1,7 @@
 package rigidBody2DFreeSwitch;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import optimalControl.Configuration;
 import optimalControl.Control;
@@ -23,6 +24,7 @@ import robotModel.OmniDrive;
  *
  */
 public class GenericSolver extends OptimalTrajectorySolver {
+	private static final Logger logger = Logger.getLogger(FreePlanner.class.getName());
 	protected DistanceMinimizer minimizer;
 	protected GenericInfo optimalSolutionInfo;
 	protected boolean animate;
@@ -46,6 +48,7 @@ public class GenericSolver extends OptimalTrajectorySolver {
 	 */
 	@Override
 	public TrajectoryInfo solve() {
+		logger.info("Start to find a generic solution for configuration " + Ts);
 		animate = false;
 		solution = TrajectoryInfo.INFINITY;
 		optimalSolutionInfo = FreeGenericInfo.INFINITY;
@@ -236,6 +239,7 @@ public class GenericSolver extends OptimalTrajectorySolver {
 			}
 			afterUs = structure.getControl(0);
 			if (getUf().equals(afterUf)) {
+				logger.severe("afterUs is not as expected");
 				throw new RuntimeException("afterUs is not as expected");
 			}
 			phaseLength = computePhase();
@@ -257,6 +261,7 @@ public class GenericSolver extends OptimalTrajectorySolver {
 			double timeL = sL.getTimeL() + fL.getTimeL() + multiplier * structL.getTimeL();
 			double distL = sL.getDistanceL() + fL.getDistanceL() + multiplier * structL.getDistanceL();
 			if (timeL < 0 || distL < 0 || Double.isInfinite(timeL) || Double.isInfinite(distL)) {
+				logger.severe("Lipschitz Constant Error");
 				throw new RuntimeException("Lipschitz Constant Error");
 			}
 			return new DistanceTimeL(distL, timeL);
@@ -323,9 +328,11 @@ public class GenericSolver extends OptimalTrajectorySolver {
 			if (tf < 0 && Utility.isZero(tf))
 				tf = 0;
 			if (tf < 0) {
+				logger.severe("tf is smaller than 0");
 				throw new RuntimeException("Error: tf is smaller than 0");
 			}
 			if (cycles < 0) {
+				logger.severe("cycles is smaller than 0");
 				throw new RuntimeException("Error: cycles is smaller than 0");
 			}
 			return new FreeGenericInfo.Builder(distanceTime, H)
