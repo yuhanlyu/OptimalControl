@@ -22,8 +22,8 @@ public class Configuration {
 	}
 	
 	/**
-	 * 
-	 * @param q: another configuration
+	 * Copy constructor
+	 * @param q another configuration
 	 */
 	public Configuration(Configuration q) {
 		x = q.getX();
@@ -33,7 +33,7 @@ public class Configuration {
 	
 	/**
 	 * Create a configuration corresponding to a transformation
-	 * @param T
+	 * @param T a Transformation
 	 */
 	public Configuration(Transformation T) {
 		x = T.getX();
@@ -42,21 +42,21 @@ public class Configuration {
 	}
 	
 	/**
-	 * @return return x value
+	 * @return x value
 	 */
 	public double getX() {
 		return x;
 	}
 	
 	/**
-	 * @return return y value
+	 * @return y value
 	 */
 	public double getY() {
 		return y;
 	}
 	
 	/**
-	 * @return return orientation
+	 * @return orientation
 	 */
 	public double getTheta() {
 		return theta;

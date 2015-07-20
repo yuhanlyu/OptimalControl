@@ -13,7 +13,8 @@ public class Transformation {
 	private double cos;
 	
 	/**
-	 * @param q
+	 * Construct from a configuration
+	 * @param q a configuration
 	 */
 	public Transformation(Configuration q) {
 		x = q.getX();
@@ -22,6 +23,10 @@ public class Transformation {
 		cos = Math.cos(q.getTheta());
 	}
 	
+	/**
+	 * Construct from a point
+	 * @param p a point
+	 */
 	public Transformation(Point2D p) {
 		x = p.getX();
 		y = p.getY();
@@ -30,10 +35,11 @@ public class Transformation {
 	}
 	
 	/**
-	 * @param arg_x
-	 * @param arg_y
-	 * @param arg_sin
-	 * @param arg_cos
+	 * Construct from position and orientation
+	 * @param arg_x x-coordinate
+	 * @param arg_y y-coordinate
+	 * @param arg_sin sin theta
+	 * @param arg_cos cos theta
 	 */
 	public Transformation(double arg_x, double arg_y, double arg_sin, double arg_cos) {
 		x = arg_x;
@@ -44,8 +50,8 @@ public class Transformation {
 	
 	/**
 	 * Create a transformation from a control and its duration
-	 * @param u
-	 * @param time
+	 * @param u control
+	 * @param time duration
 	 */
 	public Transformation(Control u, double time) {
         double theta = u.getOmega() * time, sinc = sinc(theta), verc = verc(theta);
@@ -89,7 +95,7 @@ public class Transformation {
 	
 	/**
 	 * Integrate a trajectory
-	 * @param traj: Trajectory want to integrate
+	 * @param traj Trajectory want to integrate
 	 * @return final configuration
 	 */
 	public Transformation move(Trajectory trajectory) {
@@ -102,9 +108,9 @@ public class Transformation {
 	
 	/**
 	 * Integrate a trajectory with time limit
-	 * @param traj: Trajectory want to integrate
-	 * @param time: End time
-	 * @return
+	 * @param traj Trajectory want to integrate
+	 * @param time End time
+	 * @return final configuration
 	 */
 	public Transformation move(Trajectory trajectory, double time) {
 		double sum = 0.0;
@@ -150,8 +156,8 @@ public class Transformation {
 	
 	
 	/**
-	 * 
-	 * @return
+	 * Get the location
+	 * @return a point in the plane
 	 */
 	public Point2D toPoint() {
 		return new Point2D.Double(getX(), getY());

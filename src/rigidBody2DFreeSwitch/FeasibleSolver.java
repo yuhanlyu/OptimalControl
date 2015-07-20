@@ -1,6 +1,5 @@
 package rigidBody2DFreeSwitch;
 import java.awt.geom.Point2D;
-import java.util.List;
 
 import optimalControl.Control;
 import optimalControl.ControlSet;
@@ -43,7 +42,7 @@ public class FeasibleSolver extends OptimalTrajectorySolver {
 
 	/**
 	 * Find a possible trajectory using one control
-	 * @return
+	 * @return a trajectory
 	 */
 	private TrajectoryInfo singlePlan() {
 		return U.controlStream().reduce(TrajectoryInfo.INFINITY, 
@@ -55,8 +54,8 @@ public class FeasibleSolver extends OptimalTrajectorySolver {
 	
 	/**
 	 * Find a possible trajectory using one control u
-	 * @param u
-	 * @return
+	 * @param u only control
+	 * @return a trajectory
 	 */
 	private TrajectoryInfo singlePlan(Control u) {
 		return u.isTranslation() ? singleTranslation(u) : singleRotation(u);
@@ -64,8 +63,8 @@ public class FeasibleSolver extends OptimalTrajectorySolver {
 	
 	/**
 	 * Find a possible trajectory using one translation
-	 * @param u
-	 * @return
+	 * @param u a translation control
+	 * @return a trajectory
 	 */
 	private TrajectoryInfo singleTranslation(Control u) {
 	    Control usW = u.toWorld(Ts);
@@ -88,8 +87,8 @@ public class FeasibleSolver extends OptimalTrajectorySolver {
 	
 	/**
 	 * Find a possible trajectory using one rotation
-	 * @param u
-	 * @return
+	 * @param u a rotation
+	 * @return a trajectory
 	 */
 	private TrajectoryInfo singleRotation(Control u) {
 	    Homogeneous cs = Ts.transform(new Homogeneous(u));
@@ -111,7 +110,7 @@ public class FeasibleSolver extends OptimalTrajectorySolver {
 	
 	/**
 	 * Find a feasible trajectory using only two controls
-	 * @return
+	 * @return a trajectory
 	 */
 	private TrajectoryInfo pairPlan() {
 		return U.controlStream().reduce(TrajectoryInfo.INFINITY, 
@@ -123,8 +122,8 @@ public class FeasibleSolver extends OptimalTrajectorySolver {
 	
 	/**
 	 * Find a feasible trajectory using only two controls with one of them is u1
-	 * @param u1
-	 * @return
+	 * @param u1 a control
+	 * @return a trajectory
 	 */
 	private TrajectoryInfo pairPlan(Control u1) {
 		return U.controlStream().filter(u2 -> !u1.equals(u2))
@@ -137,9 +136,9 @@ public class FeasibleSolver extends OptimalTrajectorySolver {
 	
 	/**
 	 * Find a feasible trajectory using two controls u1 and u2
-	 * @param u1
-	 * @param u2
-	 * @return
+	 * @param u1 a control
+	 * @param u2 a control
+	 * @return a trajectory
 	 */
 	private TrajectoryInfo pairPlan(Control u1, Control u2) {
 		if (u1.isTranslation() && u2.isTranslation())
@@ -154,9 +153,9 @@ public class FeasibleSolver extends OptimalTrajectorySolver {
 	
 	/**
 	 * Find a possible trajectory using two translations
-	 * @param us
-	 * @param uf
-	 * @return
+	 * @param us a translation
+	 * @param uf a translation
+	 * @return a trajectory
 	 */
 	private TrajectoryInfo twoTranslations(Control us, Control uf) {
 		if (!Utility.angleEqual(Ts.getTheta(), Tf.getTheta()))
@@ -203,7 +202,7 @@ public class FeasibleSolver extends OptimalTrajectorySolver {
 	 * Find a feasible trajectory using a rotation u1 and a translation u2
 	 * @param u1 a rotation
 	 * @param u2 a translation
-	 * @return
+	 * @return a trajectory
 	 */
 	private TrajectoryInfo rotationAndTranslation(Control u1, Control u2) {
 	    Control u2s = u2.toWorld(Ts);
@@ -231,9 +230,9 @@ public class FeasibleSolver extends OptimalTrajectorySolver {
 	
 	/**
 	 * Find a possible trajectory using two rotations u1 and u2
-	 * @param u1
-	 * @param u2
-	 * @return
+	 * @param u1 a rotation
+	 * @param u2 a rotation
+	 * @return a trajectory
 	 */
 	private TrajectoryInfo twoRotations(Control u1, Control u2) {
 	    Control u2v = new Control(u2.getVx(), u2.getVy(), 0.0);
@@ -283,11 +282,11 @@ public class FeasibleSolver extends OptimalTrajectorySolver {
 	
 	/**
 	 * Move from Ta to Tb using u1 and u2, where Ta and Tb only differ in x and y coordinate
-	 * @param u1
-	 * @param u2
-	 * @param Ta
-	 * @param Tb
-	 * @return
+	 * @param u1 a control
+	 * @param u2 a control
+	 * @param Ta a transformation
+	 * @param Tb a transformation
+	 * @return a trajectory
 	 */
 	private static Trajectory transformrot(Control u1, Control u2, Transformation Ta, Transformation Tb) {
 		Homogeneous c1 = new Homogeneous(u1);

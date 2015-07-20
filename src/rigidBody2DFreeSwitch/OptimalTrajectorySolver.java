@@ -21,9 +21,9 @@ public abstract class OptimalTrajectorySolver {
 	
 	/**
 	 * Constructor
-	 * @param U
-	 * @param Ts
-	 * @param Tf
+	 * @param U a control set
+	 * @param Ts initial configuration
+	 * @param Tf final configuration
 	 */
 	public OptimalTrajectorySolver(ControlSet U, Transformation Ts) {
 		this.U = U;
@@ -53,7 +53,7 @@ public abstract class OptimalTrajectorySolver {
 	
 	/**
 	 * Find all optimal trajectories that satisfies necessary conditions
-	 * @return
+	 * @return all trajectories
 	 */
 	public List<TrajectoryInfo> getAllTrajectories() {
 		return null;
@@ -61,8 +61,8 @@ public abstract class OptimalTrajectorySolver {
 	
 	/**
 	 * Test whether T is goal
-	 * @param T
-	 * @return
+	 * @param T a configuration
+	 * @return true if T is approximately equal to the goal
 	 */
 	public static final boolean isGoal(Transformation T) {
 		double distX = T.getX() - Tf.getX();

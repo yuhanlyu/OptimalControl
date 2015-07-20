@@ -12,8 +12,8 @@ public class Interval {
 	
 	/**
 	 * Construct an interval with begin and end
-	 * @param begin
-	 * @param end
+	 * @param begin left end
+	 * @param end right end
 	 */
 	public Interval(double begin, double end) {
 		this.begin = begin;

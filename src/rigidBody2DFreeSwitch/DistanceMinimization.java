@@ -17,10 +17,9 @@ public class DistanceMinimization implements Comparable<DistanceMinimization> {
 		
 	/**
 	 * Constructor
-	 * @param metric
-	 * @param lb
-	 * @param ub
-	 * @param distanceTime
+	 * @param metric distance functor
+	 * @param range the range of searching
+	 * @param distanceTime estimated distance and time
 	 */
 	public DistanceMinimization(DistanceFunctor metric, 
 			Interval range, DistanceTime distanceTime) {
@@ -46,6 +45,12 @@ public class DistanceMinimization implements Comparable<DistanceMinimization> {
 		return metric.computeTrajectory(H);
 	}
 	
+	/**
+	 * Compute all solutions with respect to the Hamiltonian vale
+	 * @param H the Hamiltonian value
+	 * @param distError upper bound of the distance error
+	 * @return all trajectories
+	 */
 	public List<GenericInfo> computeAllTrajectories(double H, double distError) {
 		return metric.computeAllTrajectories(H, distError);
 	}
@@ -61,7 +66,7 @@ public class DistanceMinimization implements Comparable<DistanceMinimization> {
 	
 	/**
 	 * Return the number of cycles for the previous solution
-	 * @return
+	 * @return number of cycles
 	 */
 	public long getCycles() {
 		return metric.getCycles();
@@ -69,8 +74,8 @@ public class DistanceMinimization implements Comparable<DistanceMinimization> {
 	
 	/**
 	 * Return the Lipschitz constant for the Hamiltonian value H
-	 * @param H
-	 * @return
+	 * @param H the Hamiltonian value
+	 * @return Lipschitz constant for distance and time
 	 */
 	public DistanceTimeL getL(double H, long multiplier) {
 		return metric.getL(H, multiplier);
@@ -85,8 +90,8 @@ public class DistanceMinimization implements Comparable<DistanceMinimization> {
 	}
 
 	/**
-	 * 
-	 * @return
+	 * Get the distance functor
+	 * @return distance functor
 	 */
 	public DistanceFunctor getMetric() {
 		return metric;
@@ -100,6 +105,10 @@ public class DistanceMinimization implements Comparable<DistanceMinimization> {
 		return getEstimatedDistanceTime().compareTo(o.getEstimatedDistanceTime());
 	}
 	
+	/**
+	 * Test whether there are multiple solutions
+	 * @return true if there are multiple solutions
+	 */
 	public boolean hasMultipleSolution() {
 		return metric.hasMultipleSolution();
 	}

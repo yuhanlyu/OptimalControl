@@ -44,10 +44,9 @@ public class LipschitzianMinimizer extends DistanceMinimizer {
 	
 	/**
 	 * Constructor
-	 * @param minimization
-	 * @param delta
-	 * @param distError
-	 * @param timeError
+	 * @param delta gap along boundaries
+	 * @param distError maximum distance error
+	 * @param timeError maximum time error
 	 */
 	public LipschitzianMinimizer(double delta, double distError, double timeError) {
 		super(delta, distError, timeError);
@@ -77,8 +76,8 @@ public class LipschitzianMinimizer extends DistanceMinimizer {
 		
 		/**
 		 * Constructor
-		 * @param range
-		 * @param minimization
+		 * @param range range of searching
+		 * @param minimization minimization task
 		 */
 		public Region(Interval range, DistanceMinimization minimization) {
 			this.range = range;
@@ -92,10 +91,10 @@ public class LipschitzianMinimizer extends DistanceMinimizer {
 		
 		/**
 		 * Constructor
-		 * @param range
-		 * @param beginDT
-		 * @param endDT
-		 * @param L
+		 * @param range range of search
+		 * @param beginDT distance and time at the beginning of the range
+		 * @param endDT distance and time at the end of the range
+		 * @param L Lipschitz constant in the range
 		 */
 		public Region(Interval range, DistanceTime beginDT, DistanceTime endDT, DistanceTimeL L, long beginCycles, long endCycles) {
 			this.range = range;
@@ -109,7 +108,7 @@ public class LipschitzianMinimizer extends DistanceMinimizer {
 		
 		/**
 		 * Compute the split point for the current region
-		 * @return
+		 * @return the split point
 		 */
 		public double splitPoint() {
 			double split = (range.getBegin() + range.getEnd()) * 0.5 + 
@@ -127,10 +126,11 @@ public class LipschitzianMinimizer extends DistanceMinimizer {
 		
 		/**
 		 * Split the region by the split point and return left part
-		 * @param splitPoint
-		 * @param dt
-		 * @param dtL
-		 * @return
+		 * @param splitPoint the split point
+		 * @param dt distance time for the whole range
+		 * @param dtL Lipschitz constant for the whole range
+		 * @param midCycles the number of cycles at the middle point
+		 * @return left part
 		 */
 		public Region splitLeft(double splitPoint, DistanceTime dt, DistanceTimeL dtL, long midCycles) {
 			return new Region(new Interval(range.getBegin(), splitPoint), beginDT, dt, dtL, beginCycles, midCycles);
@@ -138,9 +138,11 @@ public class LipschitzianMinimizer extends DistanceMinimizer {
 		
 		/**
 		 * Split the region by the split point and return right part
-		 * @param splitPoint
-		 * @param dt
-		 * @return
+		 * @param splitPoint the split point
+		 * @param dt distance time for the whole range
+		 * @param dtL Lipschitz constant for the whole range
+		 * @param midCycles the number of cycles at the middle point
+		 * @return right part
 		 */
 		public Region splitRight(double splitPoint, DistanceTime dt, DistanceTimeL dtL, long midCycles) {
 			return new Region(new Interval(splitPoint, range.getEnd()), dt, endDT, dtL, midCycles, endCycles);
@@ -148,7 +150,7 @@ public class LipschitzianMinimizer extends DistanceMinimizer {
 		
 		/**
 		 * Return the lower bound of the time for the region
-		 * @return
+		 * @return lower bound of the time for the region
 		 */
 		public double getTimeLowerBound() {
 			return lb.getTime();
@@ -156,7 +158,7 @@ public class LipschitzianMinimizer extends DistanceMinimizer {
 		
 		/**
 		 * Return the lower bound of the distance for the region
-		 * @return
+		 * @return the lower bound of the distance for the region
 		 */
 		public double getDistanceLowerBound() {
 			return lb.getDistance();
@@ -169,11 +171,11 @@ public class LipschitzianMinimizer extends DistanceMinimizer {
 		
 		/**
 		 * Compute the lower bound
-		 * @param begin
-		 * @param end
-		 * @param L
-		 * @param interval
-		 * @return
+		 * @param begin begin of the range
+		 * @param end end of the range
+		 * @param L Lipschitz constant
+		 * @param interval interval
+		 * @return lower bound on the distance and time
 		 */
 		private DistanceTime lowerBound(DistanceTime begin, DistanceTime end, DistanceTimeL L, Interval interval) {
 			double distLb = (begin.getDistance() + end.getDistance() - interval.length() * L.getDistanceL()) * 0.5;
@@ -183,8 +185,11 @@ public class LipschitzianMinimizer extends DistanceMinimizer {
 		
 		/**
 		 * Test whether the region is useful
-		 * @param minDT
-		 * @return
+		 * @param minDT minimum ditance and time so far
+		 * @param findAllTrajectories whether wants to find all trajectories
+		 * @param hasFound already explored before
+		 * @param cycles number of cycles
+		 * @return true if the region is useful, false otherwise
 		 */
 		public boolean isUsefulRegion(DistanceTime minDT, boolean findAllTrajectories, boolean hasFound, long cycles) {
 			if (range.isEmpty())

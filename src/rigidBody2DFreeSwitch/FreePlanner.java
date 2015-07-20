@@ -23,37 +23,42 @@ public class FreePlanner {
 	
 	/**
 	 * Determine the optimal trajectory by trying all possible trajectory types
-	 * @param U
-	 * @param Ts
-	 * @param Tf
-	 * @return 
+	 * @param U a control set
+	 * @param Ts initial configuration
+	 * @param Tf goal configuraiton
+	 * @return  a trajectory
 	 */
 	public TrajectoryInfo solve(ControlSet U, Transformation Ts) {
 		solutionMap = new HashMap<>();
 		FeasibleSolver feasibleSolver = new FeasibleSolver(U, Ts);
 		TrajectoryInfo feasibleSolution = feasibleSolver.solve();
 		solutionMap.put("Feasible", feasibleSolution);
+		System.out.println("Found feasible");
 		TrajectoryInfo minSolution = feasibleSolution;
 		TGTSolver TGTSolver = new TGTSolver(U, Ts);
 		TrajectoryInfo TGTSolution = TGTSolver.solve();
 		solutionMap.put("TGT", TGTSolution);
 		if (TGTSolution.compareSolution(minSolution) < 0 || TGTSolution.close(minSolution))
 			minSolution = TGTSolution;
+		System.out.println("Found TGT");
 		
 		WhirlSolver whirlSolver = new WhirlSolver(U, Ts);
 		TrajectoryInfo whirlSolution = whirlSolver.solve();
 		solutionMap.put("Whirl", whirlSolution);
 		if (whirlSolution.compareSolution(minSolution) < 0 || whirlSolution.close(minSolution))
 			minSolution = whirlSolution;
+		System.out.println("Found Whirl");
 		SingularSolver singularSolver = new SingularSolver(U, Ts, minSolution.getTime());
 		TrajectoryInfo singularSolution = singularSolver.solve();
 		solutionMap.put("Singular", singularSolution);
 		if (singularSolution.compareSolution(minSolution) < 0 || singularSolution.close(minSolution))
 			minSolution = singularSolution;
+		System.out.println("Found Singular");
 		
 		//genericSolver = new GenericTrajectorySolver(U, Ts,  new UniformSampleMinimizer());
-		GenericSolver genericSolver = new GenericSolver(U, Ts,  new LipschitzianMinimizer());
+		GenericSolver genericSolver = new GenericSolver(U, Ts,  new LipschitzianMinimizer(1e-3, 1e-3, 1e-3));
 		TrajectoryInfo genericSolution = genericSolver.solve();
+		System.out.println("Found Generic");
 		solutionMap.put("Generic", genericSolution);
 		if (genericSolution.compareSolution(minSolution) < 0)
 			minSolution = genericSolution;
@@ -63,8 +68,8 @@ public class FreePlanner {
 	
 	/**
 	 * Return solutions 
-	 * @param type
-	 * @return
+	 * @param type type of the trajectory
+	 * @return a trajectory
 	 */
 	public TrajectoryInfo getSolution(String type) {
 		return solutionMap.get(type);
@@ -74,7 +79,7 @@ public class FreePlanner {
 	 * Return all trajectories found by the planner
 	 * @param U the control set
 	 * @param Ts the initial configuration
-	 * @return
+	 * @return all trajectories
 	 */
 	public List<TrajectoryInfo> getAllTrajectories(ControlSet U, Transformation Ts) {
 		FeasibleSolver feasibleSolver = new FeasibleSolver(U, Ts);

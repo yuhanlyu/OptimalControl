@@ -46,7 +46,7 @@ public class ControlStructure {
 	/**
 	 * Construct the trajectory corresponding the Hamiltonian value
 	 * @param H the Hamiltonian value
-	 * @return
+	 * @return a trajectory
 	 */
 	public Trajectory buildTrajectory(double H) {
 		Trajectory result = new Trajectory();
@@ -59,9 +59,9 @@ public class ControlStructure {
 	
 	/**
 	 * Compute the distance and time from a configuration up the the index-th control
-	 * @param H
-	 * @param index
-	 * @return
+	 * @param H the Hamiltonian value
+	 * @param index index of the control
+	 * @return distance and time
 	 */
 	public DistanceTime getDistanceTime(double H, int index) {
 		return dtFunctors.get(index).getDistanceTime(H);
@@ -70,7 +70,7 @@ public class ControlStructure {
 	/**
 	 * Compute the distance and time from a configuration for the whole structure
 	 * @param H the Hamiltonian value
-	 * @return
+	 * @return distance and time
 	 */
 	public DistanceTime getDistanceTime(double H) {
 		List<DistanceTime> dts = dtFunctors.stream().map(functor -> functor.getDistanceTime(H)).collect(Collectors.toList());
@@ -81,8 +81,8 @@ public class ControlStructure {
 	/**
 	 * Compute the distance and time from a configuration no more than the phaseLength controls
 	 * @param H the Hamiltonian value
-	 * @param phaseLength
-	 * @return
+	 * @param phaseLength the limit number of controls
+	 * @return distance and time
 	 */
 	public DistanceTime getPhaseDistnceTime(double H, int phaseLength) {
 		List<DistanceTime> dts = new ArrayList<>();
@@ -95,9 +95,9 @@ public class ControlStructure {
 	
 	/**
 	 * Compute the Lipschitz for the index-th control with a given H value
-	 * @param H
-	 * @param index
-	 * @return
+	 * @param H the Hamiltonian value
+	 * @param index the index of the control
+	 * @return Lipschitz constant for distance and time
 	 */
 	public DistanceTimeL getL(double H, int index) {
 		return dtFunctors.get(index).getL(H);
@@ -105,8 +105,8 @@ public class ControlStructure {
 	
 	/**
 	 * Compute the Lipschitz constant for the whole structure
-	 * @param H
-	 * @return
+	 * @param H the Hamiltonian value
+	 * @return Lipschitz constant for distance and time
 	 */
 	public DistanceTimeL getL(double H) {
 		List<DistanceTimeL> dtLs = dtFunctors.stream().map(functor -> functor.getL(H)).collect(Collectors.toList());

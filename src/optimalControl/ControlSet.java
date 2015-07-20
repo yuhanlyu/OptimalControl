@@ -36,7 +36,7 @@ public class ControlSet implements Iterable<Control> {
 	}
 	
 	/**
-	 * @return return the number of controls
+	 * @return the number of controls
 	 */
 	public int size() {
 		return controls.size();
@@ -44,7 +44,7 @@ public class ControlSet implements Iterable<Control> {
 	
 	/**
 	 * @param index
-	 * @return return the i-th control
+	 * @return the i-th control
 	 */
 	public Control getControl(int index) {
 		return controls.get(index);
@@ -52,7 +52,7 @@ public class ControlSet implements Iterable<Control> {
 	
 	/**
 	 * Return stream of controls
-	 * @return
+	 * @return a stream of controls
 	 */
 	public Stream<Control> controlStream() {
 		return controls.stream();
@@ -82,7 +82,7 @@ public class ControlSet implements Iterable<Control> {
 	
 	/**
 	 * Return stream of critical values
-	 * @return
+	 * @return a stream of critical values
 	 */
 	public Stream<Double> criticalValueStream() {
 		return critHs.stream();
@@ -119,9 +119,9 @@ public class ControlSet implements Iterable<Control> {
 	
 	/**
 	 * 6.3.1 equation (6.17)
-	 * This is different from the thesis
-	 * @param ui
-	 * @param u
+	 * This is different from Furtuna's thesis
+	 * @param ui a control
+	 * @param u another control
 	 * @param TLR a configuration in the control line frame
 	 * @return the derivative of H of u with respect to ui, larger than zero means that ui will have higher H value
 	 */
@@ -216,10 +216,10 @@ public class ControlSet implements Iterable<Control> {
 	
 	/**
 	 * Compute the time of applying u until switch at configuration TLR with minimum duration minTime
-	 * @param TLR
-	 * @param u
-	 * @param minTime
-	 * @return
+	 * @param TLR configuration
+	 * @param u control
+	 * @param minTime minimum duration
+	 * @return time of applying u until switch
 	 */
 	public double switchTime(Transformation TLR, Control u, double minTime) {
 	    return controls.stream()
@@ -342,6 +342,12 @@ public class ControlSet implements Iterable<Control> {
 	    return new ControlTime(u, switchTime(TLR, u, 0.0));
 	}
 	
+	/**
+	 * Compute a sustainable control with its duration at TLR
+	 * @param TLR configuration in the control line frame
+	 * @param round whether want to round 
+	 * @return a control and its duration
+	 */
 	public ControlTime getGenericSegment(Transformation TLR, boolean round) {
 	    Control u = sustainableControl(TLR);
 	    return new ControlTime(u, switchTime(TLR, u, 0.0, round));
@@ -441,7 +447,7 @@ public class ControlSet implements Iterable<Control> {
 	
 	/**
 	 * Find a generic trajectory from T to a singular point starting
-	 * @param TLR
+	 * @param TLR a configuration in the control line frame
 	 * @return a result trajectory, or null if failed
 	 */
 	public Trajectory getExcursion(Transformation TLR, double minTime) {
@@ -492,9 +498,9 @@ public class ControlSet implements Iterable<Control> {
 	
 	/**
 	 * Determine whether there exists a translation parallel to the control line from TLR 
-	 * @param TLR
-	 * @param H
-	 * @return
+	 * @param TLR a configuration in the control line frame
+	 * @param H Hamiltonian value
+	 * @return a feasible translation, null otherwise
 	 */
 	public Control singularTranslation(Transformation TLR, double H) {
 		for (Control u : controls) {
@@ -509,7 +515,7 @@ public class ControlSet implements Iterable<Control> {
 	
 	/**
 	 * Return the maximum velocity
-	 * @return
+	 * @return maximum velocity
 	 */
 	public double maxVelocity() {
 		return controls.stream().mapToDouble(u -> u.getVelocity()).max().getAsDouble();

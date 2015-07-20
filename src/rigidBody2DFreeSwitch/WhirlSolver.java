@@ -32,7 +32,7 @@ public class WhirlSolver extends OptimalTrajectorySolver {
 	
 	/**
 	 * If all controls have the same angular speed with maximum magnitude
-	 * @return
+	 * @return atrajectory
 	 */
 	protected TrajectoryInfo whirl() {
 		double minOmega = U.controlStream().mapToDouble(u -> u.getOmega()).min().getAsDouble();
@@ -44,8 +44,8 @@ public class WhirlSolver extends OptimalTrajectorySolver {
 	
 	/**
 	 * Find whirl trajectory for a fixed angular velocity
-	 * @param omega
-	 * @return
+	 * @param omega angular velocity
+	 * @return trajectory
 	 */
 	protected TrajectoryInfo whirl(double omega) {
 		List<Control> controls = U.controlStream().filter(u -> Utility.absEqual(u.getOmega(), omega))
@@ -55,8 +55,8 @@ public class WhirlSolver extends OptimalTrajectorySolver {
 	
 	/**
 	 * Find whirl trajectory for a fixed sequence of controls
-	 * @param controls
-	 * @return
+	 * @param controls sequence of controls
+	 * @return a trajectory
 	 */
 	private TrajectoryInfo whirl(List<Control> controls) {
 	    if (controls.size() < 2)
@@ -72,9 +72,9 @@ public class WhirlSolver extends OptimalTrajectorySolver {
 	/**
 	 * Find whirl trajectory for a fixed sequence of controls with first control us
 	 * @param us the first control
-	 * @param p
-	 * @param controls
-	 * @return
+	 * @param p distance from the first control to the next control
+	 * @param controls a list of controls
+	 * @return a trajectory
 	 */
 	private TrajectoryInfo whirl(Control us, double p, List<Control> controls) {
 		return controls.stream().reduce(TrajectoryInfo.INFINITY, 
@@ -86,11 +86,11 @@ public class WhirlSolver extends OptimalTrajectorySolver {
 	
 	/**
 	 * Find whirl trajectory for given first control and the last control
-	 * @param us
-	 * @param uf
-	 * @param p
-	 * @param controls
-	 * @return
+	 * @param us the first control
+	 * @param uf the final control
+	 * @param p distance from the first control to the next control
+	 * @param controls a list of controls
+	 * @return a trajectory
 	 */
 	protected TrajectoryInfo whirl(Control us, Control uf, double p, List<Control> controls) {
 		return controls.stream().filter(beforeUf -> !uf.equals(beforeUf))
@@ -103,12 +103,12 @@ public class WhirlSolver extends OptimalTrajectorySolver {
 	
 	/**
 	 * Find whirl trajectory for given first control, and last two controls
-	 * @param us
-	 * @param beforeUf
-	 * @param uf
-	 * @param p
-	 * @param controls
-	 * @return
+	 * @param us the first control
+	 * @param beforeUf the control before the final control
+	 * @param uf the final control
+	 * @param p distance from the first control to the next control
+	 * @param controls a list of controls
+	 * @return a trajectory
 	 */
 	private TrajectoryInfo whirl(Control us, Control beforeUf, Control uf, double p, List<Control> controls) {
 		//Rotate us to the beginning		
@@ -160,13 +160,13 @@ public class WhirlSolver extends OptimalTrajectorySolver {
      * with the first control u0 and the last control uf and the second to
      * the last control before_uf
      * the control line direction is dir and the number of cycles is n
-	 * @param us
-	 * @param beforeUf
-	 * @param uf
-	 * @param n
-	 * @param direction
-	 * @param controls
-	 * @return
+	 * @param us the first control
+	 * @param beforeUf the contorl before the final control
+	 * @param uf the final control
+	 * @param n number of cycles
+	 * @param direction direction of rotation centers
+	 * @param controls a list of controls
+	 * @return a trajectory
 	 */
 	private TrajectoryInfo whirl(Control us, Control beforeUf, Control uf, int n, double direction, List<Control> controls) {
 		Trajectory trajectory = new Trajectory();
@@ -226,9 +226,9 @@ public class WhirlSolver extends OptimalTrajectorySolver {
 	
 	/**
 	 * Compute whirl trajectory for only two actions us and uf
-	 * @param us
-	 * @param uf
-	 * @return
+	 * @param us the first control
+	 * @param uf the last conrol
+	 * @return a trajectory
 	 */
 	private TrajectoryInfo whirlTwo(Control us, Control uf) {
 		Point2D cs = us.rotationCenter(Ts);

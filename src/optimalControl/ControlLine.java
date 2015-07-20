@@ -25,28 +25,28 @@ public class ControlLine {
 	}
 	
 	/**
-	 * @return return kx
+	 * @return kx
 	 */
 	public double getKx() {
 		return kx;
 	}
 	
 	/**
-	 * @return return ky
+	 * @return ky
 	 */
 	public double getKy() {
 		return ky;
 	}
 	
 	/**
-	 * @return return ktheta
+	 * @return ktheta
 	 */
 	public double getKtheta() {
 		return ktheta;
 	}
 	
 	/**
-	 * @return return Hamiltonian value
+	 * @return Hamiltonian value
 	 */
 	public double getH() {
 		return H;
@@ -54,7 +54,7 @@ public class ControlLine {
 	
 	/**
 	 * Test whether a control line is valid
-	 * @return true is the control line is valid
+	 * @return true if the control line is valid
 	 */
 	public boolean isValid() {
 		return Double.isFinite(kx) && Double.isFinite(ky) && Double.isFinite(ktheta) && Double.isFinite(H);

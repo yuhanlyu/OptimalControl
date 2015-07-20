@@ -81,7 +81,7 @@ public class Synthesis {
 	
 	/**
 	 * Create synthesis for a specific y value
-	 * @param y
+	 * @param y y-coordinate
 	 */
 	private void synthesis(int y) {
 		IntStream.range(0, xLength).forEach(x -> synthesis(x, y));
@@ -89,7 +89,8 @@ public class Synthesis {
 	
 	/**
 	 * Create synthesis for specific x value and y value
-	 * @param y
+	 * @param x x-coordinate
+	 * @param y y-coordinate
 	 */
 	private void synthesis(int xIndex, int yIndex) {
 		double x = xLowerBound + xIndex * resolution;

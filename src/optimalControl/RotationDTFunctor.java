@@ -18,6 +18,12 @@ public class RotationDTFunctor extends DTFunctor {
     private int m2; // multiplier two
     private static final double m[] = new double[]{-1.0, 1.0};
 	
+    /**
+     * Constructor
+     * @param pre previous control
+     * @param current current control
+     * @param next next control
+     */
 	public RotationDTFunctor(Control pre, Control current, Control next) {
 		double omegaDiff1 = current.getOmega() - pre.getOmega();
         double omegaDiff2 = current.getOmega() - next.getOmega();

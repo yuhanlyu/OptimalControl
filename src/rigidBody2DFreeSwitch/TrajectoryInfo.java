@@ -33,15 +33,20 @@ public class TrajectoryInfo {
 		this.trajectory = trajectory;
 	}
 	
+	/**
+	 * Set the switch cost
+	 * @param SC switch cost
+	 */
 	public static void setSwitchCost(double SC) {
 		switchCost = SC;
 	}
 	
 	/**
 	 * Create a generic trajectory info
-	 * @param trajectory
-	 * @param structure
-	 * @return
+	 * @param trajectory trajectory
+	 * @param structure control structure
+	 * @param controlLine a control line
+	 * @return a trajectoryinfo
 	 */
 	public static TrajectoryInfo createGeneric(Trajectory trajectory, ControlStructure structure, ControlLine controlLine) {
 		TrajectoryInfo result = new TrajectoryInfo(trajectory);
@@ -53,8 +58,9 @@ public class TrajectoryInfo {
 	
 	/**
 	 * Create a TGT trajectory info
-	 * @param trajectory
-	 * @return
+	 * @param trajectory trajectory
+	 * @param controlline a control line
+	 * @return a trajectoryinfo
 	 */
 	public static TrajectoryInfo createTGT(Trajectory trajectory, ControlLine controlLine) {
 		TrajectoryInfo result = new TrajectoryInfo(trajectory);
@@ -65,8 +71,9 @@ public class TrajectoryInfo {
 	
 	/**
 	 * Create a singular trajectory info
-	 * @param trajectory
-	 * @return
+	 * @param trajectory a trajectory
+	 * @param controlLine a control line
+	 * @return a trajectoryinfo
 	 */
 	public static TrajectoryInfo createSingular(Trajectory trajectory, ControlLine controlLine) {
 		TrajectoryInfo result = new TrajectoryInfo(trajectory);
@@ -77,8 +84,9 @@ public class TrajectoryInfo {
 	
 	/**
 	 * Create a whirl trajectory info
-	 * @param trajectory
-	 * @return
+	 * @param trajectory a trjaectory
+	 * @param controlLine a control line
+	 * @return a trajectorinfo
 	 */
 	public static TrajectoryInfo createWhirl(Trajectory trajectory) {
 		TrajectoryInfo result = new TrajectoryInfo(trajectory);
@@ -88,7 +96,7 @@ public class TrajectoryInfo {
 	
 	/**
 	 * Return the trajectory
-	 * @return
+	 * @return trajectory
 	 */
 	public Trajectory getTrajectory() {
 		return trajectory;
@@ -96,7 +104,7 @@ public class TrajectoryInfo {
 	
 	/**
 	 * Return the structure, if it is generic
-	 * @return
+	 * @return structure
 	 */
 	public ControlStructure getStructure() {
 		return structure;
@@ -104,7 +112,7 @@ public class TrajectoryInfo {
 	
 	/**
 	 * Test whether the trajectory is generic
-	 * @return
+	 * @return true if is generic, false otherwise
 	 */
 	public boolean isGeneric() {
 		return isGeneric;
@@ -112,7 +120,7 @@ public class TrajectoryInfo {
 	
 	/**
 	 * Test whether the trajectory is TGT
-	 * @return
+	 * @return true if is TGT, false otherwise
 	 */
 	public boolean isTGT() {
 		return isTGT;
@@ -120,7 +128,7 @@ public class TrajectoryInfo {
 	
 	/**
 	 * Test whether the trajectory is singular
-	 * @return
+	 * @return true if is singular, false otherwise
 	 */
 	public boolean isSingular() {
 		return isSingular;
@@ -128,7 +136,7 @@ public class TrajectoryInfo {
 	
 	/**
 	 * Test whether the trajectory is whirl
-	 * @return
+	 * @return true if is whirl, false otherwise
 	 */
 	public boolean isWhirl() {
 		return isWhirl;
@@ -136,7 +144,7 @@ public class TrajectoryInfo {
 	
 	/**
 	 * Test whether the trajectory is not generic, TGT, singular, and whirl
-	 * @return
+	 * @return true if is feasible, false otherwise
 	 */
 	public boolean isFeasible() {
 		return !isGeneric() && !isTGT() && !isSingular() && !isWhirl();
@@ -144,7 +152,7 @@ public class TrajectoryInfo {
 	
 	/**
 	 * Return the time for the trajectory
-	 * @return
+	 * @return time
 	 */
 	public double getTime() {
 		return trajectory.totalTime();
@@ -153,7 +161,7 @@ public class TrajectoryInfo {
 	/**
 	 * Return the cost for the trajectory
 	 * @param switchCost the cost of switching controls
-	 * @return
+	 * @return cost
 	 */
 	public double getCost(double switchCost) {
 		return trajectory.getCost(switchCost);
@@ -161,8 +169,7 @@ public class TrajectoryInfo {
 	
 	/**
 	 * Compare two solutions
-	 * @param lhs
-	 * @param rhs
+	 * @param solution another trajectory
 	 * @return negative if this is better then the parameter, else positive
 	 */
 	public int compareSolution(TrajectoryInfo solution) {
@@ -171,7 +178,7 @@ public class TrajectoryInfo {
 	
 	/**
 	 * Test whether two solutions have almost the same time
-	 * @param solution
+	 * @param solution another solution
 	 * @return
 	 */
 	public boolean close(TrajectoryInfo solution) {
@@ -180,22 +187,23 @@ public class TrajectoryInfo {
 	
 	/**
 	 * Return the controlLine
-	 * @return
+	 * @return control line
 	 */
 	public ControlLine getControlLine() {
 		return hasControlLine() ? controlLine : null;
 	}
 	
 	/**
-	 * 
-	 * @return
+	 * test whether has a control line
+	 * @return true if there is a control line, false otherwise
 	 */
 	private boolean hasControlLine() {
 		return isGeneric || isSingular || isTGT;
 	}
+	
 	/**
 	 * Test whether the trajectory is valid or not
-	 * @return
+	 * @return true if the trajectory is valid, false otherwise
 	 */
 	public boolean isValid() {
 		return Double.isFinite(getTime());

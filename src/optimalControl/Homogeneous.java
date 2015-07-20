@@ -12,7 +12,7 @@ public class Homogeneous {
 	private double omega; // orientation
 	
 	/**
-	 * @param u: Represent a control in homegeneous coordinate
+	 * @param u Represent a control in homegeneous coordinate
 	 */
 	public Homogeneous(Control u) {
 		this.x = -u.getVy();
@@ -21,9 +21,9 @@ public class Homogeneous {
 	}
 	
 	/**
-	 * @param x: x-coordinate
-	 * @param y: y-coordinate
-	 * @param omega: angular velocity
+	 * @param x x-coordinate
+	 * @param y y-coordinate
+	 * @param omega angular velocity
 	 */
 	public Homogeneous(double x, double y, double omega) {
 		this.x = x;

@@ -12,6 +12,12 @@ public class TranslationDTFunctor extends DTFunctor {
     private double cos;
     private double v; // velocity of the control
 	
+    /**
+     * Constructor
+     * @param pre previous control
+     * @param current current control
+     * @param next next control
+     */
 	public TranslationDTFunctor(Control pre, Control current, Control next) {
 		Point2D preS = pre.switchPoint(current).toPoint();
 		Point2D v2 = Utility.vector(preS, next.switchPoint(current).toPoint());

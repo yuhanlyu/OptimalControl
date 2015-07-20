@@ -29,9 +29,9 @@ public abstract class DistanceMinimizer {
 	
 	/**
 	 * Constructor
-	 * @param delta
-	 * @param distError
-	 * @param timeError
+	 * @param delta the gap along boundaries
+	 * @param distError maximum distance error
+	 * @param timeError maximum time error
 	 */
 	public DistanceMinimizer(double delta, double distError, double timeError) {
 		this.delta = delta;
@@ -40,7 +40,6 @@ public abstract class DistanceMinimizer {
 	}
 	
 	/**
-	 * 
 	 * This function is used for animation
 	 * @param minimization
 	 * @return
@@ -56,6 +55,11 @@ public abstract class DistanceMinimizer {
 	 */
 	public abstract GenericInfo minimize(DistanceMinimization minimization, boolean findAllTrajectories, List<TrajectoryInfo> trajectories);
 	
+	/**
+	 * Minimize
+	 * @param minimization
+	 * @return
+	 */
 	public GenericInfo minimize(DistanceMinimization minimization) {
 		return minimize(minimization, false, null);
 	}

@@ -18,6 +18,12 @@ import robotModel.OmniDrive;
 public class GenericAllSolver extends GenericSolver {
 	private List<TrajectoryInfo> trajectories;
 	
+	/**
+	 * Constructor
+	 * @param U a contorl set
+	 * @param Ts initial configuration
+	 * @param minimizer minimizer
+	 */
 	public GenericAllSolver(ControlSet U, Transformation Ts,
 			DistanceMinimizer minimizer) {
 		super(U, Ts, minimizer);
@@ -27,7 +33,7 @@ public class GenericAllSolver extends GenericSolver {
 	 * Process one task with animation
 	 * Here, I just hard code the robot
 	 * Moreover, if there are multiple tasks, then only the result of the last one will be stored
-	 * @param task
+	 * @param task a minimization task
 	 */
 	@Override
 	protected void processTask(DistanceMinimization task) {

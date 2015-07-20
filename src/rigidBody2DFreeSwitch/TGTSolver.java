@@ -30,7 +30,7 @@ public class TGTSolver extends OptimalTrajectorySolver {
 	
 	/**
 	 * Finding the optimal TGT trajectory
-	 * @return
+	 * @return a trajectory
 	 */
 	private TrajectoryInfo TGT() {
 		TrajectoryInfo currentMin = TrajectoryInfo.INFINITY;
@@ -50,9 +50,9 @@ public class TGTSolver extends OptimalTrajectorySolver {
 
 	/**
 	 * Find a TGT trajectory with first control us and the last control uf
-	 * @param us
-	 * @param uf
-	 * @return
+	 * @param us first control
+	 * @param uf final control
+	 * @return a trajectory
 	 */
 	private TrajectoryInfo TGT(Control us, Control uf) {
 	    ControlLine controlLine = TGTControlLine(us, uf);
@@ -63,10 +63,10 @@ public class TGTSolver extends OptimalTrajectorySolver {
 	
 	/**
 	 * Find a TGT trajectory with first control us, the last control uf, and a control line
-	 * @param us
-	 * @param uf
-	 * @param controlLine
-	 * @return
+	 * @param us first control
+	 * @param uf final control
+	 * @param controlLine a control line
+	 * @return a trajectory
 	 */
 	protected TrajectoryInfo TGT(Control us, Control uf, ControlLine controlLine) {
 		Transformation TLW = new Transformation(controlLine);
@@ -129,7 +129,7 @@ public class TGTSolver extends OptimalTrajectorySolver {
 	 * @param TfL the final configuration
 	 * @param usL the translation at the initial configuration in the control line frame
 	 * @param ufL the translation at the final configuration in the control line frame
-	 * @return
+	 * @return time for the first control and the last control
 	 */
 	protected static double[] tsAndTf(Transformation TsL,
                                     Transformation afterUs,
@@ -170,9 +170,9 @@ public class TGTSolver extends OptimalTrajectorySolver {
 	
 	/**
 	 * Create a control line for a TGT trajectory
-	 * @param us
-	 * @param uf
-	 * @return
+	 * @param us first control
+	 * @param uf last control
+	 * @return a control line
 	 */
 	private ControlLine TGTControlLine(Control us, Control uf) {
 		Control usW = us.toWorld(Ts);
@@ -208,11 +208,11 @@ public class TGTSolver extends OptimalTrajectorySolver {
 	
 	/**
 	 * Compute the range of k3
-	 * @param T
-	 * @param u1
-	 * @param k1
-	 * @param k2
-	 * @return
+	 * @param T a configuration
+	 * @param u1 a control
+	 * @param k1 kx
+	 * @param k2 ky
+	 * @return the range of ktheta
 	 */
 	private Interval computeK3Range(Transformation T, Control u1, double k1, double k2) {
 		double ub = Double.POSITIVE_INFINITY;
@@ -233,12 +233,12 @@ public class TGTSolver extends OptimalTrajectorySolver {
 
 	/**
 	 * Compute the value of k3 when the switch point of u1 and u2 is on the control line
-	 * @param T
-	 * @param u1
-	 * @param u2
-	 * @param k1
-	 * @param k2
-	 * @return
+	 * @param T a configuration
+	 * @param u1 first control
+	 * @param u2 next control
+	 * @param k1 kx
+	 * @param k2 ky
+	 * @return ktheta
 	 */
 	private static double switchPointOnLine(Transformation T, Control u1, Control u2, double k1, double k2) {
 		Homogeneous SP = T.transform(u1.switchPoint(u2));

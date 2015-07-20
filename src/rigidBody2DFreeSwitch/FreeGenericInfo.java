@@ -118,8 +118,8 @@ public class FreeGenericInfo implements GenericInfo{
 		
 		/**
 		 * Constructor
-		 * @param distanceTime
-		 * @param H
+		 * @param distanceTime the distance and time for the trajectory
+		 * @param H the Hamiltonian value
 		 */
 		public Builder(DistanceTime distanceTime, double H) {
 			this.distanceTime = distanceTime;
@@ -194,7 +194,7 @@ public class FreeGenericInfo implements GenericInfo{
 		
 		/**
 		 * Build the generic trajectory info
-		 * @return
+		 * @return a generic info
 		 */
 		public FreeGenericInfo build() {
 			return new FreeGenericInfo(this);

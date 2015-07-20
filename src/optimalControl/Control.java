@@ -11,9 +11,9 @@ public class Control {
 	private double omega; // angular velocity
 	
 	/**
-	 * @param arg_vx: velocity in x-coordinate
-	 * @param arg_vy: velocity in y-coordinate
-	 * @param arg_omega: angular velocity
+	 * @param arg_vx velocity in x-coordinate
+	 * @param arg_vy velocity in y-coordinate
+	 * @param arg_omega angular velocity
 	 */
 	public Control(double arg_vx, double arg_vy, double arg_omega) {
 		this.vx = arg_vx;
@@ -23,7 +23,7 @@ public class Control {
 	
 	/**
 	 * Create a control from a homogeneous point
-	 * @param p
+	 * @param p a Homogeneous point
 	 */
 	public Control(Homogeneous p) {
 		this.vx = p.getY();
@@ -33,28 +33,28 @@ public class Control {
 	
 	/**
 	 * Get the reverse of the control
-	 * @return
+	 * @return reverse control
 	 */
 	public Control reverse() {
 		return new Control(-getVx(), -getVy(), -getOmega());
 	}
 	
 	/**
-	 * @return return the angular velocity
+	 * @return the angular velocity
 	 */
 	public double getOmega() {
 		return omega;
 	}
 
 	/**
-	 * @return return the velocity in y-coordinate
+	 * @return the velocity in y-coordinate
 	 */
 	public double getVy() {
 		return vy;
 	}
 	
 	/**
-	 * @return return the velocity in x-coordinate
+	 * @return the velocity in x-coordinate
 	 */
 	public double getVx() {
 		return vx;
@@ -91,7 +91,7 @@ public class Control {
 	
 	/**
 	 * Return the velocity of the control
-	 * @return
+	 * @return velocity
 	 */
 	public double getVelocity() {
 		return Math.sqrt(vx * vx + vy * vy);
@@ -159,7 +159,7 @@ public class Control {
 	
 	/**
 	 * Compute the radius of rotation
-	 * @return
+	 * @return the radius of the rotation
 	 */
 	public double radius() {
 		if (isTranslation())

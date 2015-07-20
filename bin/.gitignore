@@ -1,0 +1,9 @@
+/.DS_Store
+/data/
+/obstacleModel/
+/optimalControl/
+/rigidBody2DCostlySwitch/
+/rigidBody2DFreeSwitch/
+/rigidBody2DPlannerWithObstacle/
+/robotModel/
+/ui/

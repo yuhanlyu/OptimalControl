@@ -227,6 +227,11 @@ public class ControlLineFactory {
 		}
 	}
 	
+	/**
+	 * A null line functor
+	 * @author yuhanlyu
+	 *
+	 */
 	private class NullLineFunctor extends ControlLineFunctor {
 		
 		@Override
@@ -397,9 +402,9 @@ public class ControlLineFactory {
 		
 		/**
 		 * Constructor
-		 * @param T
-		 * @param u
-		 * @param next
+		 * @param T a Transformation
+		 * @param u a Control
+		 * @param next the next control
 		 */
 		public TranslationFunctor(Transformation T, Control u, Control next) {
 			Point2D SP = T.transform(u.switchPoint(next)).toPoint();
@@ -453,6 +458,12 @@ public class ControlLineFactory {
 		private double omega;
 		private double omegaD;
 
+		/**
+		 * Constructor
+		 * @param T a Transformation
+		 * @param u a Control
+		 * @param next the next Control
+		 */
 		public RotationFunctor(Transformation T, Control u, Control next) {
 			RCW = new Transformation(u.rotationCenter(T));
 			sameOmega = u.getOmega() == next.getOmega();

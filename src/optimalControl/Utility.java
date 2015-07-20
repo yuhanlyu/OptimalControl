@@ -1,9 +1,5 @@
 package optimalControl;
-import java.awt.Shape;
-import java.awt.geom.Arc2D;
-import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
-import java.util.ArrayList;
 
 
 public interface Utility {
@@ -11,9 +7,9 @@ public interface Utility {
 	
 	/**
 	 * Test whether a and b are approximate
-	 * @param a
-	 * @param b
-	 * @return
+	 * @param a first value
+	 * @param b second value
+	 * @return true if a and b are approximately equal, false otherwise
 	 */
 	public static boolean absEqual(double a, double b) {
 		double diff = Math.abs(a - b);
@@ -23,9 +19,9 @@ public interface Utility {
 	}
 	
 	/**
-	 * Test whether x is arppxoaimtely zero
-	 * @param x
-	 * @return
+	 * Test whether x is approximately zero
+	 * @param x a value
+	 * @return true if x is approximately zero
 	 */
 	public static boolean isZero(double x) {
 		return absEqual(x, 0.0);
@@ -44,9 +40,9 @@ public interface Utility {
 	
 	/**
 	 * Compute the time of rotating angle theta with angular velocity omega
-	 * @param theta
-	 * @param omega
-	 * @return
+	 * @param theta angle
+	 * @param omega angular velocity
+	 * @return time
 	 */
 	public static double timeOfRotateTheta(double theta, double omega) {
 		double diff = normalize(theta);
@@ -59,8 +55,8 @@ public interface Utility {
 	
 	/**
 	 * Normalize an angle x to an angle in [0 .. 2pi)
-	 * @param x
-	 * @return
+	 * @param x angle
+	 * @return normalized angle
 	 */
 	public static double normalize(double x) {
 		double temp = x % (Math.PI * 2);
@@ -69,9 +65,9 @@ public interface Utility {
 	
 	/**
 	 * Test whether two angles are the same
-	 * @param a
-	 * @param b
-	 * @return
+	 * @param a first angle
+	 * @param b second angle
+	 * @return true if two angles are approximately the same, false otherwise
 	 */
 	public static boolean angleEqual(double a, double b) {
 		double na = normalize(a), nb = normalize(b);
@@ -83,7 +79,7 @@ public interface Utility {
 	
 	/**
 	 * Compute the distance from p to the origin
-	 * @param p
+	 * @param p a point
 	 * @return the distance from p to the origin
 	 */
 	public static double distanceToOrigin(Point2D p) {
@@ -92,13 +88,13 @@ public interface Utility {
 	}
 	
 	/**
-	 * For a transformation T, apply rotation u1 until the vector from
+	 * At a transformation T, apply rotation u1 until the vector from
      * rotation center of u1 to rotation center of u2 is the same as direction
-	 * @param T
-	 * @param u1
-	 * @param u2
-	 * @param direction
-	 * @return
+	 * @param T transformation
+	 * @param u1 first control
+	 * @param u2 next control
+	 * @param direction a vector
+	 * @return time
 	 */
 	public static double timeToLine(Transformation T, Control u1, Control u2, double direction) {
 	    Point2D c1 = T.transform(new Homogeneous(u1)).toPoint();
@@ -109,9 +105,9 @@ public interface Utility {
 	
 	/**
 	 * Compute the duration of u such that the rotation centers of previous, u, and next are aligned
-	 * @param previous
-	 * @param u
-	 * @param next
+	 * @param previous previous control
+	 * @param u current control
+	 * @param next next control
 	 * @return duration
 	 */
 	public static double timeToLine(Control previous, Control u, Control next) {
@@ -124,10 +120,11 @@ public interface Utility {
 	}
 	
 	/**
-	 * @param T: Transformation of the initial configuration
-	 * @param traj: Trajectory want to integrate
-	 * @param time: End time
-	 * @return
+	 * Compute the rotation center at a given time point
+	 * @param T Transformation of the initial configuration
+	 * @param traj a trajectory want to integrate
+	 * @param time end time
+	 * @return rotation center
 	 */
 	public static Point2D rotationCenter(Transformation T, Trajectory traj, double time) {
 		double sum = 0.0;
@@ -148,9 +145,9 @@ public interface Utility {
 	
 	/**
 	 * Create a vector from origin to destination
-	 * @param origin
-	 * @param destination
-	 * @return
+	 * @param origin point
+	 * @param destination point
+	 * @return a point representing a vector
 	 */
 	public static Point2D vector(Point2D origin, Point2D destination) {
 		return new Point2D.Double(destination.getX() - origin.getX(), destination.getY() - origin.getY());
@@ -175,10 +172,10 @@ public interface Utility {
 	/**
 	 * Let c, c1, and c2 be the rotation centers of u, u1, and u2 respectively
 	 * Compute the angle from the vector (c, c1) to (c, c2) 
-	 * @param u1
-	 * @param u2
-	 * @param u3
-	 * @return
+	 * @param u control
+	 * @param u1 another control
+	 * @param u2 the second control
+	 * @return angle
 	 */
 	public static double angle(Control u, Control u1, Control u2) {
 		Point2D c = u.rotationCenter();

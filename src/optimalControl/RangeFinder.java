@@ -17,12 +17,13 @@ public class RangeFinder {
 	private ControlLineFactory factory;
 	
 	/**
-	 * 
-	 * @param U
-	 * @param Ts
-	 * @param us
-	 * @param Tf
-	 * @param uf
+	 * Constructor
+	 * @param U control set
+	 * @param Ts initial configuration
+	 * @param us initial control
+	 * @param Tf final configuration
+	 * @param uf final control
+	 * @param factory control line factory
 	 */
 	public RangeFinder(ControlSet U, Transformation Ts, Control us, 
 			                         Transformation Tf, Control uf, ControlLineFactory factory) {
@@ -81,8 +82,8 @@ public class RangeFinder {
 	
 	/**
 	 * Compute the upper bound of Hamiltonian
-	 * @param u
-	 * @return
+	 * @param u control
+	 * @return upper bound of Hamiltonian value
 	 */
 	private double getUpperBound(Control u) {
 		double ub = U.getUpperBound();

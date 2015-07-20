@@ -8,6 +8,13 @@ import optimalControl.Transformation;
 
 public class SingularAllSolver extends SingularSolver {
 	private List<TrajectoryInfo> trajectories;
+	
+	/**
+	 * Constructor
+	 * @param U a control set
+	 * @param Ts the initial configuration
+	 * @param upperBound upper bound of the cost of trajectories being searched
+	 */
 	public SingularAllSolver(ControlSet U, Transformation Ts, double upperBound) {
 		super(U, Ts, upperBound);
 	}

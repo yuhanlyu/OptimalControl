@@ -2,10 +2,8 @@ package ui;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.Point2D;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -60,7 +58,7 @@ public class Viewer extends JFrame {
 	}
 	private static final String[] ROBOT_NAMES = robotMap.keySet().toArray(new String[0]);
 	private static final String[] TRAJECTORY_TYPES = {"Feasible", "TGT", "Whirl", "Singular", "Generic"};
-	private Robot robot = robotMap.get(ROBOT_NAMES[4]);
+	private Robot robot = robotMap.get(ROBOT_NAMES[0]);
 	private Configuration qs = new Configuration(-3, -3, Math.PI/3.0);
 	private Configuration qf = new Configuration(3, 3, Math.PI/2.0);
 	private Interval rangeX = new Interval(-2, 2);

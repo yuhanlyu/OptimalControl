@@ -10,8 +10,8 @@ public class TransformationTime {
 	
 	/**
 	 * A pair of transformation and time
-	 * @param T
-	 * @param time
+	 * @param T a transformtaion
+	 * @param time duration
 	 */
 	public TransformationTime(Transformation T, double time) {
 		this.T = T;
@@ -20,7 +20,7 @@ public class TransformationTime {
 	
 	/**
 	 * return the transformation
-	 * @return
+	 * @return the transformation
 	 */
 	public Transformation getTransformation() {
 		return T;
@@ -28,7 +28,7 @@ public class TransformationTime {
 	
 	/**
 	 * return the time
-	 * @return
+	 * @return time
 	 */
 	public double getTime() {
 		return time;

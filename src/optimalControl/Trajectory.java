@@ -18,16 +18,16 @@ public class Trajectory {
 	public Trajectory() {}
 	
 	/**
-	 * @param index: the index of the controls
-	 * @return return the index-th control
+	 * @param index the index of the controls
+	 * @return the index-th control
 	 */
 	public Control getControl(int index) {
 		return controls.get(index);
 	}
 	
 	/**
-	 * @param index: the index of the controls
-	 * @return return the index-th control
+	 * @param index the index of the controls
+	 * @return the index-th control
 	 */
 	public double getDuration(int index) {
 		return durations.get(index);
@@ -79,6 +79,10 @@ public class Trajectory {
 		return durations.stream().mapToDouble(t -> t).sorted().sum();
 	}
 	
+	/**
+	 * Reflect trajectory
+	 * @return reflected trajectory
+	 */
 	public Trajectory reflect() {
 		Trajectory result = new Trajectory();
 		for (int i = size() - 1; i >= 0; --i)

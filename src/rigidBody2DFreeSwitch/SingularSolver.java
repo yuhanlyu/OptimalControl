@@ -24,9 +24,9 @@ public class SingularSolver extends OptimalTrajectorySolver {
 
 	/**
 	 * Constructor
-	 * @param U
-	 * @param Ts
-	 * @param upperBound
+	 * @param U a control set
+	 * @param Ts initial configuration
+	 * @param upperBound upper bound of the cost of trajectories being searched
 	 */
 	public SingularSolver(ControlSet U, Transformation Ts, double upperBound) {
 		super(U, Ts);
@@ -42,7 +42,7 @@ public class SingularSolver extends OptimalTrajectorySolver {
 
 	/**
 	 * Find optimal singular trajectories
-	 * @return
+	 * @return a trajectory
 	 */
 	private TrajectoryInfo singular() {
 		return U.controlStream().reduce(TrajectoryInfo.INFINITY, 
@@ -54,8 +54,8 @@ public class SingularSolver extends OptimalTrajectorySolver {
 	
 	/**
 	 * Find optimal singular trajectories with first control us
-	 * @param us
-	 * @return
+	 * @param us initial control
+	 * @return a trajectory
 	 */
 	private TrajectoryInfo singular(Control us) {
 		return U.controlStream().filter(uf -> us.isRotation() || uf.isRotation())
@@ -68,9 +68,9 @@ public class SingularSolver extends OptimalTrajectorySolver {
 	
 	/**
 	 * Find optimal singular trajectories with first control us and the last control uf
-	 * @param us
-	 * @param uf
-	 * @return
+	 * @param us initial control
+	 * @param uf final control
+	 * @return a trajectory
 	 */
 	private TrajectoryInfo singular(Control us, Control uf) {
 		ControlLineFactory factory = new ControlLineFactory(U, Ts, us, Tf, uf, true);
@@ -82,11 +82,11 @@ public class SingularSolver extends OptimalTrajectorySolver {
 	
 	/**
 	 * Find optimal singular trajectories with first control us, the last control uf, and sign isPositive
-	 * @param us
-	 * @param uf
-	 * @param isPositive
-	 * @param factory
-	 * @return
+	 * @param us initial control
+	 * @param uf final control
+	 * @param isPositive along positive direction with respect to the control line
+	 * @param factory contorl line factory
+	 * @return a trajectory
 	 */
 	private TrajectoryInfo singular(Control us, Control uf, ControlLineFactory factory) {
 		return IntStream.range(0, U.getCriticalSize())
@@ -102,10 +102,10 @@ public class SingularSolver extends OptimalTrajectorySolver {
 	
 	/**
 	 * Find optimal singular trajectories with first control us, the last control uf, and control line
-	 * @param us
-	 * @param uf
-	 * @param controlLine
-	 * @return
+	 * @param us initial control
+	 * @param uf final control
+	 * @param controlLine a control line
+	 * @return a trajectory
 	 */
 	protected TrajectoryInfo singular(Control us, Control uf, ControlLine controlLine) {
 		if (!controlLine.isValid())
@@ -162,10 +162,10 @@ public class SingularSolver extends OptimalTrajectorySolver {
 	/**
 	 * Find a trajectory from TLR to the control line 
 	 * assuming the first control is us
-	 * @param TLR
-	 * @param us
+	 * @param TLR a configuration
+	 * @param us first control
 	 * @param trajectory an empty trajectory
-	 * @return
+	 * @return a configuraiton on the control line
 	 */
 	protected Transformation typeAsingular(Transformation TLR, Control us, Trajectory trajectory) {
 		List<Control> sustainableControls = U.sustainableControls(TLR);
@@ -181,12 +181,12 @@ public class SingularSolver extends OptimalTrajectorySolver {
 	/**
 	 * Find a trajectory backward from TLR to the control line, 
      * assuming the last control is uf
-	 * @param TLR
-	 * @param uf
+	 * @param TLR a configuration
+	 * @param uf final control
 	 * @param trajectory must be an empty trajectory
 	 *        it will be modified to contain the trajectory from TLR to the return value
 	 *        if return value is null, then trajectory can be arbitrary
-	 * @return 
+	 * @return a configuration on the control line
 	 */
 	protected Transformation typeBsingular(Transformation TLR, Control uf, Trajectory trajectory) {
 		ControlSet Ur = U.reverse();
@@ -354,10 +354,10 @@ public class SingularSolver extends OptimalTrajectorySolver {
 		
 		/**
 		 * Constructor
-		 * @param T
-		 * @param parent
-		 * @param trajectory
-		 * @param cost
+		 * @param T a configuration
+		 * @param parent parent search node
+		 * @param trajectory trajectory for this node
+		 * @param cost cost
 		 */
 		public SearchNode(Transformation T, SearchNode parent, Trajectory trajectory, double cost) {
 			this.T = T;
@@ -369,7 +369,7 @@ public class SingularSolver extends OptimalTrajectorySolver {
 		/**
 		 * Construct a trajectory follow by parent pointer
 		 * @param forward if forward is true, construct the trajectory in the reverse order 
-		 * @return
+		 * @return a trajectory
 		 */
 		public Trajectory chain(boolean forward) {
 			SearchNode node = this;
@@ -398,7 +398,7 @@ public class SingularSolver extends OptimalTrajectorySolver {
 		
 		/**
 		 * Return the cost
-		 * @return
+		 * @return cost
 		 */
 		public double getCost() {
 			return cost;
@@ -406,7 +406,7 @@ public class SingularSolver extends OptimalTrajectorySolver {
 		
 		/**
 		 * Return the transformation
-		 * @return
+		 * @return configuration
 		 */
 		public Transformation getTransformation() {
 			return T;

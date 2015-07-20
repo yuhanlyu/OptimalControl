@@ -29,11 +29,11 @@ public class GenericSolver extends OptimalTrajectorySolver {
 	
 	/**
 	 * Constructor
-	 * @param U
-	 * @param Ts
-	 * @param delta
-	 * @param distError
-	 * @param timeError
+	 * @param U a control set
+	 * @param Ts initial configuration
+	 * @param delta gap along boundaries
+	 * @param distError maximum distance error
+	 * @param timeError maximum time error
 	 */
 	public GenericSolver(ControlSet U, Transformation Ts,
 			                           DistanceMinimizer minimizer) {
@@ -68,7 +68,7 @@ public class GenericSolver extends OptimalTrajectorySolver {
 	
 	/**
 	 * Produce animation
-	 * @return
+	 * @return a trajectory
 	 */
 	public TrajectoryInfo solveWithAnimation() {
 		animate = true;
@@ -79,7 +79,7 @@ public class GenericSolver extends OptimalTrajectorySolver {
 	 * Process one task with animation
 	 * Here, I just hard code the robot
 	 * Moreover, if there are multiple tasks, then only the result of the last one will be stored
-	 * @param task
+	 * @param task minimization task
 	 */
 	protected void processTask(DistanceMinimization task) {
 		if (animate == true) {
@@ -245,8 +245,9 @@ public class GenericSolver extends OptimalTrajectorySolver {
 		
 		/**
 		 * Return the Lipschitz constant for the metric function
-		 * @param H
-		 * @return
+		 * @param H the Hamiltonian value
+		 * @param multiplier a parameter to resolve numerical issues
+		 * @return distance and time
 		 */
 		@Override
 		public DistanceTimeL getL(double H, long multiplier) {
@@ -298,7 +299,7 @@ public class GenericSolver extends OptimalTrajectorySolver {
 		/**
 		 * Compute the trajectory from Ts to Tf by using structure with the Hamiltonian H
 		 * Assuming structure exists
-		 * @param H
+		 * @param H the Hamiltonian value
 		 * @return a trajectory with additional information
 		 */
 		@Override
@@ -342,7 +343,7 @@ public class GenericSolver extends OptimalTrajectorySolver {
 		 * @param TsL a configuration that is a starting of a control for afterUs
 		 * @param TfL a configuration that is a starting of a control for afterUf
 		 * @param H the Hamiltonian value
-		 * @return
+		 * @return distance and time
 		 */
 		private DistanceTime getDistance(Transformation TsL, Transformation TfL, double H) {
 			DistanceTime period = structure.getDistanceTime(H);
@@ -354,6 +355,7 @@ public class GenericSolver extends OptimalTrajectorySolver {
 		
 		/**
 		 * Compute the index of the switch from uf to afterUf in the structure
+		 * @return the index
 		 */
 		private int computePhase() {
 			for (int i = 1; i <= structure.size(); ++i) {
@@ -367,9 +369,9 @@ public class GenericSolver extends OptimalTrajectorySolver {
 		
 		/**
 		 * Compute minimum {|d - period_length * cycles| : cycles >= 0}
-		 * @param dis
-		 * @param periodLength
-		 * @return
+		 * @param dis distance to the goal
+		 * @param periodLength length of the period
+		 * @return minimum distance
 		 */
 		private double computeCycles(double d, double periodLength) {
 			if (d * periodLength < 0) {
