@@ -16,7 +16,7 @@ import optimalControl.Utility;
  */
 public class FeasibleSolver extends OptimalTrajectorySolver {
 	
-	private static final Logger logger = Logger.getLogger(FreePlanner.class.getName());
+	private static final Logger logger = Logger.getLogger(FeasibleSolver.class.getName());
 
 	/**
 	 * Constructor

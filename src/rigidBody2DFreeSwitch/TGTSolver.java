@@ -19,7 +19,7 @@ import optimalControl.Utility;
  */
 public class TGTSolver extends OptimalTrajectorySolver {
 	
-	private static final Logger logger = Logger.getLogger(FreePlanner.class.getName());
+	private static final Logger logger = Logger.getLogger(TGTSolver.class.getName());
 	
 	public TGTSolver(ControlSet U, Transformation Ts) {
 		super(U, Ts);

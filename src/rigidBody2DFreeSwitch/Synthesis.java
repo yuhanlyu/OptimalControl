@@ -1,7 +1,6 @@
 package rigidBody2DFreeSwitch;
 import java.awt.geom.Point2D;
 import java.util.HashMap;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.IntStream;
 
@@ -16,7 +15,7 @@ import robotModel.Robot;
  *
  */
 public class Synthesis {
-	private static final Logger logger = Logger.getLogger(FreePlanner.class.getName());
+	private static final Logger logger = Logger.getLogger(Synthesis.class.getName());
 	public static final int NO_SOLUTION = -1;
 	public static final int FEASIBLE_SOLUTION = -2;
 	public static final int TGT_SOLUTION = -3;

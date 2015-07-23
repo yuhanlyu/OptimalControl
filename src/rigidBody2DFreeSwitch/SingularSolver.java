@@ -20,7 +20,7 @@ import optimalControl.Utility;
  *
  */
 public class SingularSolver extends OptimalTrajectorySolver {
-	private static final Logger logger = Logger.getLogger(FreePlanner.class.getName());
+	private static final Logger logger = Logger.getLogger(SingularSolver.class.getName());
 	protected static final double MIN_SINGULAR_DURATION = 0.00001; // for Omni-directional vehicle
 	protected double upperBound;
 

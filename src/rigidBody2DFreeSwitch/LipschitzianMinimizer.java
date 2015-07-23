@@ -26,7 +26,7 @@ import optimalControl.Utility;
  *
  */
 public class LipschitzianMinimizer extends DistanceMinimizer {
-	private static final Logger logger = Logger.getLogger(FreePlanner.class.getName());
+	private static final Logger logger = Logger.getLogger(LipschitzianMinimizer.class.getName());
 	private static final double DEFAULT_DELTA = 50 * Utility.EPSILON;  // Need some distance away from critical values
 	private static final double DEFAULT_TIME_ERROR = Utility.EPSILON;  // Some configurations may take very long time if
 	                                                         		   // this value is too small

@@ -24,7 +24,7 @@ import robotModel.OmniDrive;
  *
  */
 public class GenericSolver extends OptimalTrajectorySolver {
-	private static final Logger logger = Logger.getLogger(FreePlanner.class.getName());
+	private static final Logger logger = Logger.getLogger(GenericSolver.class.getName());
 	protected DistanceMinimizer minimizer;
 	protected GenericInfo optimalSolutionInfo;
 	protected boolean animate;

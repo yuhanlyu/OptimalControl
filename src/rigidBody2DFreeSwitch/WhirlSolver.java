@@ -19,7 +19,7 @@ import optimalControl.Utility;
  */
 public class WhirlSolver extends OptimalTrajectorySolver {
 	
-	private static final Logger logger = Logger.getLogger(FreePlanner.class.getName());
+	private static final Logger logger = Logger.getLogger(WhirlSolver.class.getName());
 	
 	public WhirlSolver(ControlSet U, Transformation Ts) {
 		super(U, Ts);
